@@ -1,0 +1,23 @@
+FROM rockylinux:9.2 as rocky-base
+RUN yum install -y epel-release 
+RUN yum install -y netcdf netcdf-fortran netcdf-fortran-devel netcdf-openmpi
+
+RUN yum install -y git cmake python python-devel pip 
+RUN git clone https://github.com/NOAA-OWP/t-route.git
+WORKDIR "/t-route/"
+RUN git reset --hard 2a2f936
+# 02a3b62 <-- before pydantic was installed
+
+RUN ln -s /usr/lib64/gfortran/modules/netcdf.mod /usr/include/openmpi-x86_64/netcdf.mod
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
+RUN python -m pip install -r requirements.txt
+RUN python -m pip install cython==3.0.2 
+
+RUN ./compiler.sh no-e
+
+
+RUN python -m pip install pyarrow deprecated geopandas
