@@ -15,9 +15,14 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 RUN python -m pip install -r requirements.txt
+# pin version number 3.0.3 deprecated something troute uses
 RUN python -m pip install cython==3.0.2 
-
 RUN ./compiler.sh no-e
 
-
+# add troute required modules
 RUN python -m pip install pyarrow deprecated geopandas
+
+
+# increase max open files soft limit
+RUN ulimit -n 10000
+
