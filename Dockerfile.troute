@@ -4,6 +4,7 @@ RUN yum install -y netcdf netcdf-fortran netcdf-fortran-devel netcdf-openmpi
 
 RUN yum install -y git cmake python python-devel pip 
 RUN git clone https://github.com/NOAA-OWP/t-route.git
+RUN git clone https://github.com/JurgenZach-NOAA/t-route-jz1.git newdata
 WORKDIR "/t-route/"
 RUN git reset --hard 2a2f936
 # 02a3b62 <-- before pydantic was installed
@@ -22,7 +23,8 @@ RUN ./compiler.sh no-e
 # add troute required modules
 RUN python -m pip install pyarrow deprecated geopandas
 
-
 # increase max open files soft limit
 RUN ulimit -n 10000
+ENTRYPOINT ["/opt/venv/bin/python", "-m", "nwm_routing"]
+RUN pwd
 
