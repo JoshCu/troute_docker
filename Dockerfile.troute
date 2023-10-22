@@ -3,11 +3,14 @@ RUN yum install -y epel-release
 RUN yum install -y netcdf netcdf-fortran netcdf-fortran-devel netcdf-openmpi
 
 RUN yum install -y git cmake python python-devel pip 
-RUN git clone https://github.com/NOAA-OWP/t-route.git
-RUN git clone https://github.com/JurgenZach-NOAA/t-route-jz1.git newdata
+# RUN git clone https://github.com/NOAA-OWP/t-route.git
+RUN git clone https://github.com/joshcu/t-route/
 WORKDIR "/t-route/"
-RUN git reset --hard 2a2f936
-# 02a3b62 <-- before pydantic was installed
+RUN git reset --hard 15bd543
+# 15bd543 <-- after LowerColorado Test fix
+# 2a2f936 <-- no-e compile fix
+
+
 
 RUN ln -s /usr/lib64/gfortran/modules/netcdf.mod /usr/include/openmpi-x86_64/netcdf.mod
 
